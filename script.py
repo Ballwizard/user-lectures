@@ -25,7 +25,7 @@ bucket = storage.bucket()
 
 # get the upload file's path in repository's directory
 # the file to upload in this scenario (a zip file) is in the same directory with the script
-fileName = 'file.zip'
+fileName = 'test image.jpg'
 dirname = os.path.dirname(os.path.realpath(__file__))
 fileFullPath = dirname + '/' + fileName
 
