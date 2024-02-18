@@ -17,7 +17,7 @@ keyFilePath = githubTempPath + '/service_account_key.json'
 # apply the bucket domain to the credentials
 cred = credentials.Certificate(keyFilePath)
 firebase_admin.initialize_app(cred, {
-    'storageBucket' : 'gs://ballwizard-app.appspot.com'
+    'storageBucket' : 'ballwizard-app.appspot.com'
 })
 
 # refer to the storage bucket
@@ -28,10 +28,9 @@ bucket = storage.bucket()
 fileName = 'test image.jpg'
 dirname = os.path.dirname(os.path.realpath(__file__))
 fileFullPath = dirname + '/' + fileName
-
 # if the file name contains file path, the bucket will create folders corresponding to the path.
 blob = bucket.blob(fileName)
-
+print(blob)
 # optional: Create new token, this one only used for downloading directly from firebase console page
 #accessToken = uuid4()
 
@@ -48,3 +47,4 @@ blob.upload_from_filename(fileFullPath)
 blob.make_public()
 
 print("your file url ", blob.public_url)
+
