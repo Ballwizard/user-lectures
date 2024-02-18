@@ -1,19 +1,15 @@
+
+
+
 import firebase_admin
-from firebase_admin import credentials, storage, firestore
+from firebase_admin import credentials, storage
 import os
 import sys
 import json
 
-# optional: Import UUID4 to create access token
-#from uuid import uuid4
+githubTempPath = '/Users/runner/work/_temp' #'/home/tonci/Downloads'
 
-# base64 decoded key file will be stored in temporary directory on runner machine
-# https://github.com/marketplace/actions/base64-to-file
-githubTempPath = '/Users/runner/work/_temp'
-
-# google cloud's service account key file absolute path on github's machine directory
-# note that the file name must be matched with the file name created from timheuer/base64-to-file@v1 action on the workflow
-keyFilePath = githubTempPath + '/service_account_key.json'
+keyFilePath = githubTempPath  + '/service_account_key.json' # + '/ballwizard-app-firebase-adminsdk-ibbzq-ab6c69b760.json'
 
 # apply the bucket domain to the credentials
 cred = credentials.Certificate(keyFilePath)
@@ -25,20 +21,43 @@ firebase_admin.initialize_app(cred, {
 bucket = storage.bucket()
 db = firestore.client()
 
-# get the upload file's path in repository's directory
-# the file to upload in this scenario (a zip file) is in the same directory with the script
 fileName = sys.argv[1]
 dirname = os.path.dirname(os.path.realpath(__file__))
 fileFullPath = dirname + '/' + fileName
-# if the file name contains file path, the bucket will create folders corresponding to the path.
 blob = bucket.blob(fileName)
 
+blob.upload_from_filename(fileFullPath)
+
+blob.make_public()
+
+print("your file url ", blob.public_url)
 data = open(dirname + '/' + sys.argv[2])
-print(data)
-json_file = bucket.blob("lectures.json")
-print(json_file)
-file_data = json_file.download_as_bytes()
-print(file_data)
+lectures = bucket.blob("lectures.json")
+#print(data)
+file_data = lectures.download_as_bytes()
+json_data = json.loads(file_data.decode('utf-8'))
+
+json_file = json.load(data)
+json_file["thumbnail"] = blob.public_url
+print("before", len(json_data["lectures"]))
+json_data["lectures"].append(json_file)
+print("after", len(json_data["lectures"]))
+json_data["id"][json_file["lecture_id"]] = json_file
+
+for tag in json_file["tags"]:
+	json_tag = json_data["tags"][tag[0]]
+	if tag[1] >= 0.75:
+		json_tag.insert(0, json_file["lecture_id"])
+	elif 0.25 < tag[1] < 0.75:
+		json_tag.insert(len(json_tag) // 2, json_file["lecture_id"])
+	else:
+		json_tag.append(json_file["lecture_id"])
+		
+
+lectures.upload_from_string(json.dumps(json_data), content_type="application/json")
+lectures.make_public()
+print(lectures.public_url)
+
 
 # optional: Create new token, this one only used for downloading directly from firebase console page
 #accessToken = uuid4()
@@ -50,10 +69,5 @@ print(file_data)
 #blob.metadata = metadata
 
 #upload to firebase storage
-blob.upload_from_filename(fileFullPath)
 
-# optional: make the file public
-blob.make_public()
-
-print("your file url ", blob.public_url)
 
