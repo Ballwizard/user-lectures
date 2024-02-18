@@ -4,7 +4,7 @@ import os
 import sys
 
 # optional: Import UUID4 to create access token
-from uuid import uuid4
+#from uuid import uuid4
 
 # base64 decoded key file will be stored in temporary directory on runner machine
 # https://github.com/marketplace/actions/base64-to-file
@@ -33,13 +33,13 @@ fileFullPath = dirname + '/' + fileName
 blob = bucket.blob(fileName)
 
 # optional: Create new token, this one only used for downloading directly from firebase console page
-accessToken = uuid4()
+#accessToken = uuid4()
 
 # optional: Create new dictionary with the metadata
-metadata = { "firebaseStorageDownloadTokens": accessToken }
+#metadata = { "firebaseStorageDownloadTokens": accessToken }
 
 # optional: Set meta data for the blob wich contains the access token
-blob.metadata = metadata
+#blob.metadata = metadata
 
 #upload to firebase storage
 blob.upload_from_filename(fileFullPath)
