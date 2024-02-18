@@ -36,7 +36,7 @@ jobs:
         id: write_key_file
         uses: timheuer/base64-to-file@v1
         with:
-          fileName: 'file.json' # name of the written key file
+          fileName: 'service_account_key.json' # name of the written key file
           encodedString: ${{ secrets.SERVICE_ACCOUNT_SECRET }} # Secret stored in Github secrets
       
       # run the upload script
