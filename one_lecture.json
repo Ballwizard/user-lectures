@@ -1,0 +1,16 @@
+{
+	"title": "this is a test lecture",
+     	"lecture_id": "another fake id",
+     	"thumbnail": "",
+      	"date_of_creation": "2024-02-18T08:36:06.531Z",
+      	"difficulty": 3,
+	"author": "ball wizard2",
+      	"tags": [
+        	["drill", 1],
+        	["shooting", 0.4],
+        	["passing", 0.6],
+        	["spacial_awareness", 0.25],
+        	["dribbling", 0.2]
+      	],
+      	"content": "# test"
+}
