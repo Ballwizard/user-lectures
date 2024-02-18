@@ -19,7 +19,7 @@ firebase_admin.initialize_app(cred, {
 
 
 bucket = storage.bucket()
-db = firestore.client()
+#db = firestore.client()
 
 fileName = sys.argv[1]
 dirname = os.path.dirname(os.path.realpath(__file__))
@@ -33,7 +33,7 @@ blob.make_public()
 print("your file url ", blob.public_url)
 data = open(dirname + '/' + sys.argv[2])
 lectures = bucket.blob("lectures.json")
-#print(data)
+#print(data)t
 file_data = lectures.download_as_bytes()
 json_data = json.loads(file_data.decode('utf-8'))
 
