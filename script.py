@@ -33,7 +33,7 @@ fileFullPath = dirname + '/' + fileName
 # if the file name contains file path, the bucket will create folders corresponding to the path.
 blob = bucket.blob(fileName)
 
-data = open(dirname + '/' sys.argv[2])
+data = open(dirname + '/' + sys.argv[2])
 print(data)
 json_file = bucket.blob("lectures.json")
 print(json_file)
