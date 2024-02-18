@@ -20,7 +20,7 @@ firebase_admin.initialize_app(cred, {
     'storageBucket' : 'ballwizard-app.appspot.com'
 })
 
-# refer to the storage bucket
+
 bucket = storage.bucket()
 
 # get the upload file's path in repository's directory
