@@ -1,7 +1,8 @@
 import firebase_admin
-from firebase_admin import credentials, storage
+from firebase_admin import credentials, storage, firestore
 import os
 import sys
+import json
 
 # optional: Import UUID4 to create access token
 #from uuid import uuid4
@@ -22,6 +23,7 @@ firebase_admin.initialize_app(cred, {
 
 
 bucket = storage.bucket()
+db = firestore.client()
 
 # get the upload file's path in repository's directory
 # the file to upload in this scenario (a zip file) is in the same directory with the script
@@ -30,7 +32,14 @@ dirname = os.path.dirname(os.path.realpath(__file__))
 fileFullPath = dirname + '/' + fileName
 # if the file name contains file path, the bucket will create folders corresponding to the path.
 blob = bucket.blob(fileName)
-print(blob)
+
+data = open(dirname + '/' sys.argv[2])
+print(data)
+json_file = bucket.blob("lectures.json")
+print(json_file)
+file_data = json_file.download_as_bytes()
+print(file_data)
+
 # optional: Create new token, this one only used for downloading directly from firebase console page
 #accessToken = uuid4()
 
