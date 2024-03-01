@@ -1,17 +1,13 @@
-
-
-
 import firebase_admin
 from firebase_admin import credentials, storage
 import os
 import sys
 import json
 
-githubTempPath = '/Users/runner/work/_temp' #'/home/tonci/Downloads'
+githubTempPath = '/Users/runner/work/_temp'
 
-keyFilePath = githubTempPath  + '/service_account_key.json' # + '/ballwizard-app-firebase-adminsdk-ibbzq-ab6c69b760.json'
+keyFilePath = githubTempPath  + '/service_account_key.json'
 
-# apply the bucket domain to the credentials
 cred = credentials.Certificate(keyFilePath)
 firebase_admin.initialize_app(cred, {
     'storageBucket' : 'ballwizard-app.appspot.com'
@@ -19,7 +15,6 @@ firebase_admin.initialize_app(cred, {
 
 
 bucket = storage.bucket()
-#db = firestore.client()
 
 fileName = sys.argv[1]
 dirname = os.path.dirname(os.path.realpath(__file__))
@@ -33,7 +28,7 @@ blob.make_public()
 print("your file url ", blob.public_url)
 data = open(dirname + '/' + sys.argv[2])
 lectures = bucket.blob("lectures.json")
-#print(data)t
+
 file_data = lectures.download_as_bytes()
 json_data = json.loads(file_data.decode('utf-8'))
 
@@ -57,17 +52,3 @@ for tag in json_file["tags"]:
 lectures.upload_from_string(json.dumps(json_data), content_type="application/json")
 lectures.make_public()
 print(lectures.public_url)
-
-
-# optional: Create new token, this one only used for downloading directly from firebase console page
-#accessToken = uuid4()
-
-# optional: Create new dictionary with the metadata
-#metadata = { "firebaseStorageDownloadTokens": accessToken }
-
-# optional: Set meta data for the blob wich contains the access token
-#blob.metadata = metadata
-
-#upload to firebase storage
-
-
